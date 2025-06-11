@@ -21,7 +21,9 @@
     display: flex;
     gap: 8px;
     align-items: center;
+    flex-wrap: nowrap;      /* 줄바꿈 방지 */
     z-index: 3000;
+    overflow-x: auto;       /* 너무 많으면 가로 스크롤 생김 */
   }
   .top-bar button {
     background: #1e90ff;
@@ -31,6 +33,8 @@
     color: white;
     font-size: 14px;
     cursor: pointer;
+    white-space: nowrap;    /* 텍스트 줄바꿈 방지 */
+    flex-shrink: 0;         /* 버튼 크기 축소 방지 */
   }
   .url-input-container {
     position: fixed;
@@ -56,63 +60,4 @@
     border-radius: 6px;
     padding: 8px 14px;
     color: white;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .iframe-container {
-    position: absolute;
-    top: 85px; /* top-bar(40px) + url-input-container(40px) */
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: white;
-  }
-  .settings {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #111;
-    color: white;
-    padding: 20px;
-    display: none;
-    z-index: 3000;
-  }
-  .settings input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-  }
-</style>
-</head>
-<body onclick="startHideTimer()">
-
-<div class="top-bar" id="topBar">
-  <button onclick="startScroll()">스타트</button>
-  <button onclick="stopScroll()">정지</button>
-  <button onclick="scrollToTop()">가장 위로</button>
-  <button onclick="scrollToBottom()">가장 아래로</button>
-  <button onclick="toggleSettings()">설정</button>
-  <button onclick="toggleUrlInput()">주소창 열기</button>
-</div>
-
-<div class="url-input-container" id="urlInputContainer">
-  <input type="text" id="urlInput" placeholder="웹툰 주소 입력 (https://로 시작)" />
-  <button onclick="navigateToURL()">확인</button>
-</div>
-
-<div class="iframe-container">
-  <iframe id="webtoonFrame" src="about:blank"></iframe>
-</div>
-
-<div class="settings" id="settings">
-  <label>스크롤 간격 (초):</label>
-  <input type="number" id="interval" value="2" min="0.1" step="0.1" />
-  <label>스크롤 거리 (픽셀):</label>
-  <input type="number" id="distance" value="100" min="1" />
-  <butt
+    fo
