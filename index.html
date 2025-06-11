@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>웹툰 자동 스크롤</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #000;
+      color: white;
+    }
+    .content {
+      height: 5000px; /* 웹툰처럼 길게 스크롤 */
+      background: linear-gradient(to bottom, #222, #444);
+    }
+    .controls {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      padding: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+    .controls button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #1e90ff;
+      color: white;
+    }
+    .settings {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #111;
+      color: white;
+      padding: 20px;
+      display: none;
+    }
+    .settings input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="content" onclick="showControls()"></div>
+
+  <div class="controls" id="controls">
+    <button onclick="startScroll()">스타트</button>
+    <button onclick="stopScroll()">정지</button>
+    <button onclick="scrollToTop()">가장 위로</button>
+    <button onclick="scrollToBottom()">가장 아래로</button>
+    <button onclick="toggleSettings()">설정</button>
+  </div>
+
+  <div class="settings" id="settings">
+    <label>스크롤 간격 (초):</label>
+    <input type="number" id="interval" value="2" min="0.1" step="0.1" />
+    <label>스크롤 거리 (픽셀):</label>
+    <input type="number" id="distance" value="100" min="1" />
+    <button onclick="saveSettings()">설정 저장</button>
+    <button onclick="toggleSettings()">뒤로가기</button>
+  </div>
+
+  <script>
+    let timer = null;
+    let interval = 2;
+    let distance = 100;
+
+    function showControls() {
+      const controls = document.getElementById("controls");
+      controls.style.display = "flex";
+      setTimeout(() => (controls.style.display = "none"), 3000);
+    }
+
+    function startScroll() {
+      stopScroll();
+      timer = setInterval(() => {
+        window.scrollBy({ top: distance, behavior: 'smooth' });
+      }, interval * 1000);
+    }
+
+    function stopScroll() {
+      clearInterval(timer);
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToBottom() {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function toggleSettings() {
+      const s = document.getElementById("settings");
+      s.style.display = s.style.display === "block" ? "none" : "block";
+    }
+
+    function saveSettings() {
+      interval = parseFloat(document.getElementById("interval").value);
+      distance = parseInt(document.getElementById("distance").value);
+      toggleSettings();
+    }
+  </script>
+</body>
+</html>
