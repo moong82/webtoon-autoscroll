@@ -1,79 +1,118 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>웹툰 자동 스크롤</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background: #000;
-      color: white;
-    }
-    .url-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: #222;
-      padding: 10px;
-      display: flex;
-      z-index: 2000;
-      gap: 5px;
-    }
-    .url-bar input {
-      flex: 1;
-      padding: 8px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: none;
-    }
-    .url-bar button {
-      padding: 8px 12px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background: #1e90ff;
-      color: white;
-      cursor: pointer;
-    }
-    .iframe-container {
-      position: absolute;
-      top: 50px;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: white;
-    }
-    .controls {
-      position: fixed;
-      top: 60px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 10px;
-      padding: 10px;
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 3000;
-    }
-    .controls button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background: #1e90ff;
-      color: white;
-      cursor: pointer;
-    }
-    .settings {
-      position: fixed;
-      bottom: 0;
-      left: 0;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>웹툰 자동 스크롤</title>
+<style>
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    background: #000;
+    color: white;
+  }
+  .top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #222;
+    padding: 8px 10px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    z-index: 3000;
+  }
+  .top-bar button {
+    background: #1e90ff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .url-input-container {
+    position: fixed;
+    top: 45px;
+    left: 0;
+    right: 0;
+    background: #222;
+    padding: 8px 10px;
+    display: none;
+    gap: 6px;
+    z-index: 3000;
+  }
+  .url-input-container input {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+  }
+  .url-input-container button {
+    background: #1e90ff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .iframe-container {
+    position: absolute;
+    top: 85px; /* top-bar(40px) + url-input-container(40px) */
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: white;
+  }
+  .settings {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #111;
+    color: white;
+    padding: 20px;
+    display: none;
+    z-index: 3000;
+  }
+  .settings input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+  }
+</style>
+</head>
+<body onclick="startHideTimer()">
+
+<div class="top-bar" id="topBar">
+  <button onclick="startScroll()">스타트</button>
+  <button onclick="stopScroll()">정지</button>
+  <button onclick="scrollToTop()">가장 위로</button>
+  <button onclick="scrollToBottom()">가장 아래로</button>
+  <button onclick="toggleSettings()">설정</button>
+  <button onclick="toggleUrlInput()">주소창 열기</button>
+</div>
+
+<div class="url-input-container" id="urlInputContainer">
+  <input type="text" id="urlInput" placeholder="웹툰 주소 입력 (https://로 시작)" />
+  <button onclick="navigateToURL()">확인</button>
+</div>
+
+<div class="iframe-container">
+  <iframe id="webtoonFrame" src="about:blank"></iframe>
+</div>
+
+<div class="settings" id="settings">
+  <label>스크롤 간격 (초):</label>
+  <input type="number" id="interval" value="2" min="0.1" step="0.1" />
+  <label>스크롤 거리 (픽셀):</label>
+  <input type="number" id="distance" value="100" min="1" />
+  <butt
